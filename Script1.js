@@ -36,9 +36,9 @@ const User4 = new Users(users[3], passwords[3], pokemons[3]);
 
 
 // Entrypoint: if Index2.html, register child handlers; else start main page flows
-if (window.location.href.includes('Index2.html')) {
+if (window.location.href.includes('Index3.html')) {
     registerChildHandlers();
-} else {
+} else if ('Index2.html') {
 
     document.getElementById('loginButton').addEventListener('click', () => startButtonsOpen('loginButton'));
     document.getElementById('loginButton').addEventListener('mouseover', () => startButtonsOpen('loginButton'));
@@ -222,7 +222,9 @@ async function loginData(userName, passw0rd, action) {
                 try { newWin.focus(); } catch (e) { }
                 let called = false;
                 function onLoad() {
+                    
                     try {
+                        
                         if (typeof newWin.UserSide === 'function') {
                             console.log(index);
                             newWin.UserSide(userPokemons, index);
@@ -295,7 +297,7 @@ async function fetchUserPokemon(pokemon, choose, placement) {
             console.log(placement);
             let index = pokemons[[placement]].flat().indexOf(pokemon) + 2;
             let flattenArray = pokemons[[placement]].flat()
-            let levelUdenExp = flattenArray[index];
+            levelUdenExp = flattenArray[index];
             if (await expLevel(levelUdenExp, d.name) > 0) {
                 exp = await expLevel(levelUdenExp, d.name, flattenArray[index - 1]);
             }
@@ -328,7 +330,6 @@ async function fetchUserPokemon(pokemon, choose, placement) {
 async function UserSide(userPokemons, placement) {
     if (!userPokemons || userPokemons.length === 0) return setStarterVisible(true);
     setStarterVisible(false);
-    console.log(placement);
     for (const id of userPokemons) await fetchUserPokemon(id, false, placement);
 }
 
@@ -361,8 +362,8 @@ async function chooseStarter(Id, name) {
     }
 
     pokemons.push([[Id, exp]]);
-    console.log(pokemons);
-    UserSide([Id]);
+    console.log(pokemons.length);
+    UserSide([Id],pokemons.length-1);
 }
 
 // Choose fighter from main page
@@ -541,7 +542,7 @@ async function makeCard(poke, card, level) {
                 pokecardh3.style.paddingRight = "49%";
             }
             else if (pokecardh3.innerText.length <= 9) {
-                pokecardh3.style.paddingRight = "46%";
+                pokecardh3.style.paddingRight = "44%";
             }
             else {
                 pokecardh3.style.paddingRight = "40%";
@@ -602,6 +603,7 @@ async function team(Id, choose) {
         teamMember.style.marginTop = "-15px";
 
         if (teamPlace) teamPlace.appendChild(teamMember);
+        console.log(document.getElementsByClassName('teamFightButton')[0]);
         if (groupCounter > 0) document.getElementsByClassName('teamFightButton')[0].style.display = 'block';
     }
 
