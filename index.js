@@ -1,4 +1,4 @@
-﻿// ------------------ UTILITY FUNCTIONS ------------------ \\ 
+﻿// ------------------ UTILITY FUNCTIONS ------------------ \\
 let newStat = 0;
 let attackMultiplier = 1;
 let defenseMultiplier = 1;
@@ -117,7 +117,7 @@ function hpColorForPercent(pct) {
     return `rgb(${red.join(',')})`;
 }
 
-// ------------------ CLASS DEFINITIONS ------------------ \
+// ------------------ CLASS DEFINITIONS ------------------ \\
 class Move {
     constructor({ name, power, type, damageClass, effectText, priority, accuracy, statChange }) {
         this.name = name;
@@ -285,14 +285,6 @@ class UI {
         menu.style.display = 'flex';
     }
 }
-
-// expose a global function to close popup so inline onclick in HTML works
-function closePopup() {
-    try { new UI().closePopup(); } catch (e) { document.getElementById('popup').style.display = 'none'; }
-}
-
-// also assign to window for compatibility
-window.closePopup = closePopup;
 
 class Battle {
     constructor(team1, team2, ui) {
@@ -581,7 +573,7 @@ class Battle {
     }
 }
 
-// ------------------ FETCH FUNCTIONS ------------------ \
+// ------------------ FETCH FUNCTIONS ------------------ \\
 const moveCache = new Map();
 
 async function fetchPokemon(name) {
@@ -627,7 +619,7 @@ async function fetchPokemon(name) {
     } catch { return null; }
 }
 
-// ------------------ TEAM SUBMISSION ------------------ \
+// ------------------ TEAM SUBMISSION ------------------ \\
 async function submitTeam(player) {
     const team = [];
     for (let i = 1; i <= 6; i++) {
@@ -659,7 +651,7 @@ async function randomizeTeam(player) {
     }
 }
 
-// ------------------ GLOBAL SWITCH BUTTONS ------------------ \
+// ------------------ GLOBAL SWITCH BUTTONS ------------------ \\
 window.manualSwitch = (player) => {
     if (Battle.instance) {
         Battle.instance.manualSwitch(player);

@@ -1,4 +1,293 @@
-﻿body {
+﻿/* Start-knapper: vises øverst på forsiden */
+.start-buttons:link {
+    display: inline-flex;
+    max-width: 10%;
+}
+
+.start-buttons img {
+    height: 10%;
+    width: 10%;
+    padding: 0px 15px;
+}
+
+.textInBall {
+    left: 74px;
+    position: absolute;
+    z-index: 10;
+    display: none;
+    top: 40px;
+    color: white;
+    font-weight: bold;
+}
+
+
+/* Række der indeholder pokémon-kortene */
+.row {
+    display: flex;
+    gap: 50px;
+    margin-top: 16px;
+    transition: transform 4s ease;
+    flex-direction: row;
+}
+
+/* Standard kort-styling for hver pokemoncard */
+.pokemoncard {
+    flex: 1;
+    min-height: 460px;
+    max-width: 40%;
+    min-width: 485px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    box-sizing: border-box;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+    .pokemoncard:hover .pokemoncard1:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+    }
+
+/* pokemoncard1 bruges til dynamisk oprettede kort i */
+.pokemoncard1 {
+    display: none;
+    min-height: 460px;
+    min-width: 485px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    padding-left: 15px;
+    box-sizing: border-box;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.heading {
+    margin-bottom: 5px;
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 25px;
+    display: flex;
+    padding: 0px 15px;
+}
+
+.PokeName {
+    padding-right: 34%;
+}
+
+.types {
+    width: 40px;
+    font-size: 7px;
+    margin-left: 5px;
+}
+
+.types2 {
+    display: none;
+    width: 40px;
+    font-size: 7px;
+}
+
+.levelStyle {
+    margin-bottom: 5px;
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 25px;
+    display: flex;
+    padding: 0px 15px;
+}
+
+.sprites {
+    width: 150px;
+    margin-bottom: 10px;
+    display: inline-block;
+}
+
+.infoBar {
+    font-size: 11px;
+    width: 70%;
+    height: fit-content;
+    border-style: solid;
+    border-width: 1px;
+    ;
+    margin: 10px auto;
+    word-spacing: 3px;
+}
+
+.login {
+    display: none;
+    position: fixed;
+    left: 550px;
+    right: 550px;
+    top: 200px;
+    bottom: 200px;
+    border: 3px solid #f1f1f1;
+    border-radius: 25px;
+    max-width: 500px;
+    max-height: 500px;
+    z-index: 2;
+    background-color: rgb(223, 223, 223);
+}
+
+.closeButton {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: rgb(223, 223, 223);
+    color: black;
+    border: none;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+
+
+
+
+/* Række der indeholder brugerens pokémon-kort */
+.userRow {
+    z-index: 3;
+    display: flex;
+    gap: 50px;
+    margin-top: 16px;
+    transition: transform 4s ease;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+/* Standard kort-styling for hver pokemoncard */
+.userPokemoncard {
+    flex: 1;
+    min-height: 460px;
+    max-width: 35%;
+    min-width: 485px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    box-sizing: border-box;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+    .userPokemoncard:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+    }
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #ffffff;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    z-index: 4;
+    left: 1 px;
+    top: 1 px;
+}
+
+    /* Buttons inside the dropdown */
+    .dropdown-content button {
+        padding: 12px;
+        text-decoration: none;
+        display: block;
+        background-color: #ffffff;
+        border-width: 0px;
+    }
+
+        /* Change color of dropdown buttons on hover */
+        .dropdown-content button:hover {
+            background-color: #ddd;
+        }
+
+.team {
+    display: none;
+    display: flex;
+    gap: 5px;
+    margin-top: 16px;
+    width: 90px;
+    flex-direction: column;
+    flex-wrap: wrap;
+    border: 2px solid black;
+    background-color: white;
+    right: 10px;
+    top: 10px;
+    position: fixed;
+    z-index: 5;
+}
+
+    .team img {
+        width: 70px;
+        height: 50px;
+        margin: 0;
+    }
+
+    .team p {
+        margin: 0;
+        padding: 0px 5px;
+    }
+
+.deleteMember {
+    position: relative;
+    top: 20px;
+    right: 8px;
+    margin-left: 80%;
+    width: 15px;
+    padding: 0;
+    z-index: 6;
+}
+
+    .deleteMember:hover {
+        background-color: red;
+    }
+
+
+.teamFightButton {
+    display: none;
+    align-items: center;
+    appearance: none;
+    background-color: #FCFCFD;
+    border-radius: 4px;
+    border-width: 0;
+    box-shadow: rgba(45, 35, 66, 0.4) 0 2px 4px, rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #D6D6E7 0 -3px 0 inset;
+    box-sizing: border-box;
+    color: #36395A;
+    cursor: pointer;
+    font-family: "JetBrains Mono", monospace;
+    height: 30px;
+    justify-content: center;
+    line-height: 1;
+    list-style: none;
+    overflow: hidden;
+    padding-left: 6px;
+    padding-right: 6px;
+    position: relative;
+    text-align: left;
+    text-decoration: none;
+    transition: box-shadow .15s, transform .15s;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    white-space: nowrap;
+    will-change: box-shadow, transform;
+    font-size: 10px;
+}
+
+    .teamFightButton:focus {
+        box-shadow: #D6D6E7 0 0 0 1.5px inset, rgba(45, 35, 66, 0.4) 0 2px 4px, rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #D6D6E7 0 -3px 0 inset;
+    }
+
+    .teamFightButton:hover {
+        box-shadow: rgba(45, 35, 66, 0.4) 0 4px 8px, rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #D6D6E7 0 -3px 0 inset;
+        transform: translateY(-2px);
+    }
+
+    .teamFightButton:active {
+        box-shadow: #D6D6E7 0 3px 7px inset;
+        transform: translateY(2px);
+    }
+
+
+body {
     font-family: sans-serif;
     margin: 0;
     padding: 0;
