@@ -53,6 +53,10 @@ if (window.location.href.includes('index3.html')) {
     firstPokemons();
     Pokemons();
 }
+else {
+    document.getElementById('pokemonSprite1').addEventListener('mouseover', () => function () { document.getElementsById('battle-stats').style.display = "block"; console.log(document.getElementsById('battle-stats')) });
+
+}
 
 
 // Register message handlers for child window
@@ -878,7 +882,6 @@ async function expFight(b, L, Lp, s, placement) {
 
 async function teamFight() {
 
-    console.log(1);
     userTeam();
 }
 
@@ -1082,40 +1085,76 @@ class UI {
         bar.style.color = luminance > 150 ? '#000' : '#fff';
     }
 
+    async handleType(type) {
+        const result = await typeSymbol(type);
+
+        // You can now safely use result1
+        return result;
+    }
+
+    async processPokemon(pokemon, player, type) {
+        // ✅ Use "this" to call another method in the same class
+        let typeResult = 0;
+        typeResult = await this.handleType(pokemon);
+        console.log("Processed result:", typeResult, type);
+
+        if (typeResult != undefined && typeResult != null && type == 1) document.getElementById(`type${player}1`).src = typeResult;
+
+        if (typeResult != undefined && typeResult != null && type == 2) {
+            document.getElementById(`type${player}2`).src = typeResult;
+            document.getElementById(`type${player}2`).style.display = "block";
+        }
+
+    }
+
     renderPokemon(pokemon, player) {
         document.getElementById(`pokemonNameDisplay${player}`).textContent = pokemon.name;
         document.getElementById(`pokemonSprite${player}`).src = pokemon.sprite;
-        const statsDiv = document.getElementById(`stats${player}`);
-        // show stat stages next to stat values and transient change marker
-        statsDiv.innerHTML = Object.entries(pokemon.stats)
-            .map(([k, v]) => {
-                const stage = pokemon.statStages && pokemon.statStages[k] ? pokemon.statStages[k] : 0;
-                const stageLabel = stage !== 0 ? ` (${stage > 0 ? '+' : ''}${stage})` : '';
-                // transient change label (shows +N or -N next to the stat for a moment)
-                let changeLabel = '';
-                if (pokemon._lastChange && pokemon._lastChange.statKey === k) {
-                    const d = pokemon._lastChange.delta || 0;
-                    if (d !== 0) changeLabel = ` <span class="stat-change ${d > 0 ? 'stat-up' : 'stat-down'}">${d > 0 ? '+' : ''}${d}</span>`;
-                }
-                return `${k.toUpperCase()}: ${v}${stageLabel}${changeLabel}`;
-            })
-            .join('<br>');
-        document.getElementById(`type${player}`).textContent = `Type: ${pokemon.types.join(' / ')}`;
+
+
+        const j = Object.entries(pokemon.stats).map(([k, v]) => {
+            const stage = pokemon.statStages && pokemon.statStages[k] ? pokemon.statStages[k] : 0;
+            const stageLabel = stage !== 0 ? ` (${stage > 0 ? '+' : ''}${stage})` : '';
+            // transient change label (shows +N or -N next to the stat for a moment)
+            let changeLabel = '';
+            if (pokemon._lastChange && pokemon._lastChange.statKey === k) {
+                const d = pokemon._lastChange.delta || 0;
+                if (d !== 0) changeLabel = ` <span class="stat-change ${d > 0 ? 'stat-up' : 'stat-down'}">${d > 0 ? '+' : ''}${d}</span>`;
+            }
+            return `${k.toUpperCase()}: ${v}${stageLabel}${changeLabel}`;
+        })
+            .join('\n');
+
+        this.processPokemon(pokemon.types[0], player, 1);
+
+        if (pokemon.types.length == 2) {
+            this.processPokemon(pokemon.types[1], player, 2);
+        }
+
         this.updateHp(pokemon, player);
-        this.renderMoves(pokemon, player);
+        document.getElementById(`hudMoves${player}`).addEventListener("click", () => this.renderMoves(pokemon, player))
+        document.getElementById(`pokemonSprite${player}`).title = j;
     }
 
+
+
+
+
     renderMoves(pokemon, player) {
+        document.getElementById(`hud${player}`).style.display = "none";
         const container = document.getElementById(`moves${player}`);
-        container.innerHTML = '';
+        container.innerText = '';
         pokemon.moves.forEach(move => {
             const btn = document.createElement('button');
+            btn.classList.add("teamFightButton");
             btn.textContent = move.name;
             btn.title = move.isStatus() ? `Accuracy: ${move.accuracy}\n${move.effectText}` :
                 `| Power: ${move.power}\n| Type: ${move.type}\n| Accuracy: ${move.accuracy}\n| Priority: ${move.priority}\n| Damage class: ${move.damageClass}\n| ${move.effectText}`;
+            btn.style.color = `${typeColor[move.type]}`
 
             btn.onclick = () => Battle.instance.selectMove(player, move);
             container.appendChild(btn);
+            container.style.display = "block";
         });
     }
 
@@ -1135,11 +1174,13 @@ class UI {
 
     closePopup() {
         document.getElementById("popup").style.display = "none";
+        window.close();
     }
 
     renderSwitchMenu(team, player, onSelect, forForced = false) {
         const menu = document.getElementById(`switch-menu${player}`);
         menu.innerHTML = '';
+        menu.classList.add(`switch-menu${player}`);
         team.forEach((poke, index) => {
             if (poke.hpCurrent <= 0) return;
             const btn = document.createElement('button');
@@ -1165,6 +1206,31 @@ class UI {
         });
         menu.style.display = 'flex';
     }
+
+
+
+}
+
+const typeColor =
+{
+    bug: 'lightgreen',
+    dark: 'black',
+    dragon: 'teal',
+    electric: 'yellow',
+    fairy: 'pink',
+    fighting: 'orange',
+    fire: 'red',
+    flying: 'skyblue',
+    ghost: 'darkpurple',
+    grass: 'green',
+    ground: 'rgb(206, 140, 55)',
+    ice: 'lightblue',
+    normal: 'normal',
+    poison: 'purple',
+    psychic: 'hotpink',
+    rock: 'brown',
+    steel: 'silver',
+    water: 'blue'
 }
 
 class Battle {
@@ -1182,8 +1248,14 @@ class Battle {
 
     startBattle() {
         document.getElementById('team-selection').style.display = 'none';
-        document.getElementById('battle-container').style.display = 'flex';
-        document.getElementById('battle-log').style.display = 'block';
+
+        document.getElementById('pokemon2-card').style.left = '70%';
+        document.getElementById('pokemon2-card').style.top = '210px';
+        document.getElementById('pokemon1-card').style.top = '190px';
+
+
+        //document.getElementById('battle-container').style.display = 'flex';
+        //document.getElementById('battle-log').style.display = 'block';
         this.ui.renderPokemon(this.currentPoke1, 1);
         this.ui.renderPokemon(this.currentPoke2, 2);
     }
@@ -1192,6 +1264,8 @@ class Battle {
         this.selectedMoves[player] = move;
         if (this.selectedMoves[1] && this.selectedMoves[2]) {
             this.executeTurn();
+            document.getElementsByClassName("moves-container")[0].style.display = "none";
+            document.getElementsByClassName("moves-container")[1].style.display = "none";
         }
     }
 
@@ -1199,6 +1273,7 @@ class Battle {
         // increment and display turn counter in the battle log
         this.turn++;
         this.ui.log(`--- Turn ${this.turn} ---`);
+        let IsDead = false;
 
         // If either player selected a switch, perform switches first (always)
         const isSwitch1 = this.selectedMoves[1] && this.selectedMoves[1].type === 'switch';
@@ -1210,11 +1285,13 @@ class Battle {
                 const action = this.selectedMoves[1];
                 this.performSwitch(1, action.index);
                 this.ui.log(`${this.currentPoke1.name} switched in!`);
+                document.getElementById("hud2").style.display = "block";
             }
             if (isSwitch2) {
                 const action = this.selectedMoves[2];
                 this.performSwitch(2, action.index);
                 this.ui.log(`${this.currentPoke2.name} switched in!`);
+                document.getElementById("hud1").style.display = "block";
             }
 
             // clear the switch selections (they consumed the turn)
@@ -1278,6 +1355,9 @@ class Battle {
             }
         }
         this.selectedMoves = { 1: null, 2: null };
+
+        document.getElementById("hud1").style.display = "block";
+        document.getElementById("hud2").style.display = "block";
     }
 
     async handleMove(player, action) {
@@ -1343,6 +1423,7 @@ class Battle {
         const oldPoke = player === 1 ? this.currentPoke1 : this.currentPoke2;
         // only put back the old poke into the team if it hasn't fainted
         if (!oldPoke.isFainted()) {
+
             team.push(oldPoke);
         }
 
@@ -1355,9 +1436,9 @@ class Battle {
         }
     }
 
-    async forcedSwitch(player) {
+    async forcedSwitch(player, endBattle) {
         const team = player === 1 ? this.team1 : this.team2;
-        if (team.length === 0) {
+        if (team.length === 0 || endBattle) {
             this.ui.showPopup(player === 1 ? "Player 2 wins!" : "Player 1 wins!");
             return;
         }
@@ -1453,7 +1534,8 @@ class Battle {
         });
     }
 }
-
+const level = 50;
+const level2 = 50;
 // ------------------ FETCH FUNCTIONS ------------------ \\
 const moveCache = new Map();
 
@@ -1462,7 +1544,6 @@ async function fetchPokemon(name) {
         const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${name.toLowerCase()}`);
         if (!res.ok) return null;
         const data = await res.json();
-        const level = 50;
         const stats = {};
         data.stats.forEach(s => stats[s.stat.name] = calculateStat(s.base_stat, level, 31, 0, s.stat.name === 'hp'));
         const moves = data.moves.slice(0, 4).map(m => ({
@@ -1519,6 +1600,15 @@ async function submitTeam(player) {
         document.body.style.backgroundImage = "url('https://github.com/Lpopp30/ApiPokemon/blob/main/20fe1e143ea1bb175a2035b1d180e398.jpg?raw=true')";
         document.body.style.backgroundRepeat = "no-repeat";
         document.body.style.backgroundSize = "1900px 800px";
+        document.getElementById("hud1").style.display = "block";
+        document.getElementById("hud2").style.display = "block";
+        document.getElementsByClassName("pokemon-card")[0].style.display = "block";
+        document.getElementsByClassName("pokemon-card")[1].style.display = "block";
+        document.getElementById("level1").innerText = "lv: " + level;
+        document.getElementById("level2").innerText = "lv: " + level2;
+        document.getElementsByClassName("oval")[1].style.background = "radial-gradient(circle at center, #273781ff 0%, #094679ff 100%)";
+        document.getElementsByClassName("oval")[0].style.background = "radial-gradient(circle at center, #851e1eff 0%, #923030ff 100%)";
+
     }
 }
 
@@ -1537,15 +1627,33 @@ async function randomizeTeam(player) {
     }
 }
 
+
+
 async function userTeam() {
-    const userTeam = [];
-    console.log(teamIds);
-    if (teamIds.length > 0) {
-        userTeam.push(teamIds);
-        console.log(userTeam);
+  const userTeam = [];
+  if (teamIds.length > 0) {
+    userTeam.push(...teamIds);
+
+    const battleWindow = window.open('/index.html', '_blank');
+
+    battleWindow.onload = () => {
+    // ✅ Send message to the new tab
+    battleWindow.postMessage(
+      { type: "teamData", teamIds }, // message payload
+      "*" // target origin — replace "*" with your origin for security
+    );
+    battleWindow.console.log(teamIds);
+        for (let i = 1; i <= teamIds.length; i++) {
+      const el = battleWindow.document.getElementById(`team1-poke${i}`);
+      if (el) el.value = teamIds[i-1];
     }
-    return team;
+    };
+  }
+
+  return userTeam;
 }
+
+
 
 
 
@@ -1554,6 +1662,24 @@ window.manualSwitch = (player) => {
     if (Battle.instance) {
         Battle.instance.manualSwitch(player);
     }
+}
+
+function battlelogDisplay() {
+    if (document.getElementById("battle-log").style.display == "block") {
+        document.getElementById("battle-log").style.display = "none";
+    }
+    else {
+        document.getElementById("battle-log").style.display = "block";
+    }
+}
+
+function endbtn(player, endBattle) {
+
+    Battle.instance.forcedSwitch(player, endBattle)
+}
+function closePopupGlobal() {
+    const iu = new UI();
+    iu.closePopup();
 }
 
 console.log("simon was here");

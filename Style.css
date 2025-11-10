@@ -204,7 +204,7 @@
     display: flex;
     gap: 5px;
     margin-top: 16px;
-    width: 90px;
+    width: 100px;
     flex-direction: column;
     flex-wrap: wrap;
     border: 2px solid black;
@@ -242,7 +242,6 @@
 
 
 .teamFightButton {
-    display: none;
     align-items: center;
     appearance: none;
     background-color: #FCFCFD;
@@ -258,8 +257,8 @@
     line-height: 1;
     list-style: none;
     overflow: hidden;
-    padding-left: 6px;
-    padding-right: 6px;
+    padding-left: 8%;
+    padding-right: 8%;
     position: relative;
     text-align: left;
     text-decoration: none;
@@ -269,7 +268,7 @@
     touch-action: manipulation;
     white-space: nowrap;
     will-change: box-shadow, transform;
-    font-size: 10px;
+
 }
 
 .teamFightButton:focus {
@@ -309,36 +308,42 @@ body {
 
 .pokemon-name-display {
     font-weight: bold;
-    text-align: center;
     margin-bottom: 5px;
-    font-size: 18px;
-    color: #333;
-}
-
-.pokemon-container {
-    display: flex;
-    gap: 40px;
-    justify-content: center;
-    align-items: flex-start;
-    margin-top: 40px;
+    font-size: 20px;
+    color: #000000;
 }
 
 .pokemon-card {
     display: flex;
-    flex-direction: column;
+    max-width: 20%;
+    flex-direction: row;
     align-items: center;
     padding: 20px;
-    border: 1px solid #ccc;
     border-radius: 10px;
-    background: #f8f8f8;
+    background: none;
     margin: 10px;
     position: relative;
+    left: 500px;
+    display: none;
+
 }
 
-.pokemon-container img {
-    margin-top: 10px;
-    width: 120px;
-    height: 120px;
+.stat {
+    width: 60%;
+    display: flex;
+    position: absolute;
+    bottom: 80%;
+    padding-left: 3px;
+    border: 2px solid #000000;
+    background-color: gray;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.level {
+    position: relative;
+    right: 0%;
 }
 
 input[readonly][id^="healthBar"] {
@@ -386,22 +391,33 @@ input[readonly][id^="healthBar"] {
 }
 
 .moves-container {
-    margin-top: 10px;
+    display: none;
+    position: absolute;
     display: flex;
-    gap: 10px;
     flex-wrap: wrap;
-    justify-content: center;
+    padding-bottom: 4px;
 }
 
+.moves-container1 {
+    display: none;
+    left: 75%;
+    bottom: 5%;
+    border: darkblue 3px solid;
+
+}
+
+.moves-container2 {
+    display: none;
+    left: 3%;
+    top: 5%;
+    border: rgb(139, 0, 0) 3px solid;
+
+}
+
+
 .moves-container button {
-    padding: 8px 12px;
-    background-color: #eee;
-    border: 1px solid #888;
-    border-radius: 6px;
-    cursor: pointer;
-    font-family: sans-serif;
     text-transform: capitalize;
-    transition: 0.2s;
+    font-size: 20px;
 }
 
 .moves-container button:hover {
@@ -409,9 +425,12 @@ input[readonly][id^="healthBar"] {
 }
 
 .sprite-hp-container {
+    position: relative;
     display: flex;
     flex-direction: column;
-    align-items: center;
+    width: 230px;
+    z-index: 4;
+
 }
 
 .sprite-hp-container input[type="text"] {
@@ -426,32 +445,53 @@ input[readonly][id^="healthBar"] {
 
 .type-container {
     margin: 6px 0;
-    background: rgba(255, 255, 255, 0.85);
     padding: 4px 10px;
-    border-radius: 6px;
     font-weight: bold;
+    background-color: grey;
+    position: absolute;
+    right: 100%;
+    top: -8px;
+    border: 2px solid #000000;
+
 }
 
 .battle-log {
     display: none;
-    width: 80%;
-    max-width: 800px;
-    margin: 20px auto;
-    height: 150px;
+    position: fixed;
+    z-index: 7;
+    left: 10px;
+    top: 25%;
+    width: 18%;
+    height: 25%;
     border: 2px solid #333;
     border-radius: 8px;
     padding: 10px;
     background: #f0f0f0;
     overflow-y: auto;
-    font-family: sans-serif;
     font-size: 14px;
 }
 
 .switch-menu {
+    position: absolute;
     display: flex;
+    flex-direction: column;
+    display: none;
+    max-width: 20%;
     gap: 10px;
-    justify-content: center;
     margin-top: 10px;
+}
+
+.switch-menu1 {
+
+    display: none;
+    top: 25%;
+    left: 90%;
+}
+
+.switch-menu2 {
+
+    display: none;
+    top: 15%;
 }
 
 .switch-menu button {
@@ -461,6 +501,7 @@ input[readonly][id^="healthBar"] {
     background-color: #eee;
     cursor: pointer;
     text-transform: capitalize;
+
 }
 
 .switch-menu button:hover {
@@ -469,6 +510,9 @@ input[readonly][id^="healthBar"] {
 
 .battle-log p {
     margin: 4px 0;
+}
+
+.stat-container {
 }
 
 .stat-change {
@@ -499,4 +543,99 @@ input[readonly][id^="healthBar"] {
 .stat-change.fade-out {
     opacity: 0;
     transform: translateY(-6px) scale(0.98);
+}
+
+.hud1 {
+    position: fixed;
+    left: 80%;
+    bottom: 5%;
+    display: flex;
+    display: none;
+    flex-wrap: wrap;
+    border: darkblue 3px solid;
+    border-radius: 10px;
+
+    padding-bottom: 4px;
+
+}
+
+.hud2 {
+    position: fixed;
+    display: flex;
+    display: none;
+    flex-wrap: wrap;
+    right: 80%;
+    top: 5%;
+    border: darkred 3px solid;
+    border-radius: 10px;
+    padding-bottom: 4px;
+
+}
+
+.hudMoves1 {
+    font-size: 20px;
+    color: darkblue;
+}
+
+.hudMoves2 {
+    font-size: 20px;
+    color: darkred;
+}
+
+.hudSwitch1 {
+    font-size: 20px;
+    color: darkblue;
+}
+
+.hudSwitch2 {
+    font-size: 20px;
+    color: darkred;
+}
+
+.hudBattle1 {
+    font-size: 20px;
+    color: darkblue;
+}
+
+.hudBattle2 {
+    font-size: 20px;
+    color: darkred;
+}
+
+.hudEnd1 {
+    font-size: 20px;
+    color: darkblue;
+}
+
+.hudEnd2 {
+    font-size: 20px;
+    color: darkred;
+}
+
+.Player {
+    position: absolute;
+    bottom: 102%;
+    right: 33%;
+}
+
+.oval {
+    position: absolute;
+    left: 25%;
+    bottom: 20%;
+    height: 70px;
+    width: 100px;
+
+    color: rgb(0, 0, 0);
+
+    border-radius: 50%;
+    z-index: 1;
+    background: radial-gradient(circle at center, #000000 0%, #5c6e60 100%);
+    /* fade edges outward */
+    mask-image: radial-gradient(circle, rgba(0, 0, 0, 1) 20%, rgba(0, 0, 0, 0) 70%);
+    -webkit-mask-image: radial-gradient(circle, rgba(0, 0, 0, 1) 30%, rgba(0, 0, 0, 0) 100%);
+
+    mask-repeat: no-repeat;
+    -webkit-mask-repeat: no-repeat;
+    mask-size: 100% 100%;
+    -webkit-mask-size: 100% 100%;
 }

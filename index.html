@@ -1,11 +1,13 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pokemon Clash</title>
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
     <!-- TEAM SELECTION -->
@@ -36,36 +38,59 @@
     </div>
 
     <!-- BATTLE CONTAINER -->
-    <div class="pokemon-container" id="battle-container" style="display:none;">
+    <div id="moves2" class="moves-container moves-container2"></div>
+    <div id="switch-menu1" class="switch-menu"></div>
+    <div id="switch-menu2" class="switch-menu"></div>
 
-        <!-- Player 1 -->
-        <div class="pokemon-card" id="pokemon1-card">
-            <div class="pokemon-name-display" id="pokemonNameDisplay1"></div>
-            <div class="sprite-hp-container">
-                <input type="text" id="healthBar1" readonly placeholder="HP">
-                <img src="" alt="Pokemon Sprite" id="pokemonSprite1">
-            </div>
-            <div id="stats1" class="stats-container"></div>
-            <div id="type1" class="type-container"></div>
-            <div id="moves1" class="moves-container"></div>
-            <button onclick="manualSwitch(1)">Switch Pokémon</button>
-            <div id="switch-menu1" class="switch-menu"></div>
-        </div>
-
-        <!-- Player 2 -->
-        <div class="pokemon-card" id="pokemon2-card">
-            <div class="pokemon-name-display" id="pokemonNameDisplay2"></div>
-            <div class="sprite-hp-container">
-                <input type="text" id="healthBar2" readonly placeholder="HP">
-                <img src="" alt="Pokemon Sprite" id="pokemonSprite2">
-            </div>
-            <div id="stats2" class="stats-container"></div>
-            <div id="type2" class="type-container"></div>
-            <div id="moves2" class="moves-container"></div>
-            <button onclick="manualSwitch(2)">Switch Pokémon</button>
-            <div id="switch-menu2" class="switch-menu"></div>
-        </div>
+    <div class="hud2" id="hud2">
+        <button id="hudMoves2" class=" teamFightButton hudMoves2" onclick="">Moves</button>
+        <button onclick="manualSwitch(2)" class=" teamFightButton hudSwitch2">Switch</button>
+        <button onclick="battlelogDisplay()" class=" teamFightButton hudBattle2">Battle log</button>
+        <button onclick="endbtn(2, 1)"  class=" teamFightButton hudEnd2">End</button>
     </div>
+
+    <!-- Player 2 -->
+
+    <div class="pokemon-card" id="pokemon2-card">
+        <div id="stat2" class="stat">
+            <div id="type2" class="type-container types">
+                <img class="types" id="type21">
+                <img class="types2" id="type22">
+            </div>
+            <div class="pokemon-name-display" id="pokemonNameDisplay2"></div>
+            <div id="level2" class="pokemon-name-display level"></div>
+            <input type="text" id="healthBar2" readonly placeholder="HP">
+        </div>
+        <div class="sprite-hp-container">
+            <img src="" alt="Pokemon Sprite" id="pokemonSprite2">
+        </div>
+        <div class="oval"></div>
+        <!--<div id="stats1" class="stats-container"></div>-->
+
+        
+    </div>
+
+    <!-- Player 1 -->
+
+    <div class="pokemon-card" id="pokemon1-card">
+        <div id="stat" class="stat">
+            <div id="type1" class="type-container  types">
+                <img class="types" id="type11">
+                <img class="types2" id="type12">
+            </div>
+            <div class="pokemon-name-display" id="pokemonNameDisplay1"></div>
+            <div id="level1" class="pokemon-name-display level"></div>
+            <input type="text" id="healthBar1" readonly placeholder="HP">
+        </div>
+        <div class="sprite-hp-container">
+            <img src="" alt="Pokemon Sprite" id="pokemonSprite1">
+        </div>
+        <div class="oval"></div>
+        <!--<div id="stats2" class="stats-container"></div>-->
+
+
+    </div>
+        <div class="stat-container" id="battle-stats"></div>
 
     <!-- BATTLE LOG -->
     <div class="battle-log" id="battle-log"></div>
@@ -74,10 +99,19 @@
     <div class="popup-overlay" id="popup">
         <div class="popup-box">
             <p>Pokemon not found!</p>
-            <button onclick="closePopup()">OK</button>
+            <button onclick="closePopupGlobal()">OK</button>
         </div>
+    </div>
+    <div id="moves1" class="moves-container moves-container1"></div>
+    <!--<div id="moves2" class="moves-container"></div>-->
+    <div class="hud1" id="hud1">
+        <button id="hudMoves1" class=" teamFightButton hudMoves1" onclick="">Moves</button>
+        <button onclick="manualSwitch(1)" class=" teamFightButton hudSwitch1">Switch</button>
+        <button onclick="battlelogDisplay()" class=" teamFightButton hudBattle1">Battle log</button>
+        <button onclick = 'endbtn(1, 2)'  class="teamFightButton hudEnd1">End</button>
     </div>
 
     <script src="Script1.js"></script>
 </body>
+
 </html>
