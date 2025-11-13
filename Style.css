@@ -240,7 +240,6 @@
     background-color: red;
 }
 
-
 .teamFightButton {
     align-items: center;
     appearance: none;
@@ -285,18 +284,24 @@
     transform: translateY(2px);
 }
 
-
-
-
-
 body {
     font-family: 'Times New Roman', Times, serif;
     margin: 0;
     padding: 0;
+    
+    background-color: #ffffff;
+        
+}
+.gradientBody {
+    background-image:linear-gradient(to right, blue , red);
 }
 
 .team-selection {
-    margin: 20px;
+    margin: 50px 17%;
+    display: flex;
+    flex-direction: row;
+    gap: 20%;
+    justify-content: space-between;
 }
 
 .team-inputs {
@@ -304,6 +309,50 @@ body {
     flex-direction: column;
     gap: 8px;
     margin-bottom: 10px;
+    max-width: 30%;
+}
+
+.startBattle {
+    display: none;
+    max-height: fit-content;
+}
+
+.holder {
+    border-radius: 50px;
+    box-shadow: rgba(45, 35, 66, 0.4) 0 2px 4px, rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #D6D6E7 0 -3px 0 inset;
+    height: 80px;
+    position: relative;
+    background-color: rgba(248, 248, 248, 0.8);
+}
+
+.startHp {
+    position: absolute;
+    top: 55%;
+    left: 35%;
+}
+
+.startTypes {
+    position: absolute;
+    top: 45%;
+    max-width: 14%;
+    right: 5%;
+}
+
+.startTypes2 {
+    position: absolute;
+    display: none;
+    top: 45%;
+    right: 17%;
+    max-width: 13%;
+}
+
+.teamSelectName {
+    position: relative;
+    left: 40%;
+    top: 5px;
+    width: 40%;
+    max-width: fit-content;
+    z-index: 5;
 }
 
 .pokemon-name-display {
@@ -357,7 +406,6 @@ input[readonly][id^="healthBar"] {
     display: none;
 }
 
-/*popup*/
 .popup-overlay {
     position: fixed;
     top: 0;
@@ -396,6 +444,9 @@ input[readonly][id^="healthBar"] {
     display: flex;
     flex-wrap: wrap;
     padding-bottom: 4px;
+    gap: 1px;
+    justify-content: space-between;
+    z-index: 2;
 }
 
 .moves-container1 {
@@ -414,14 +465,24 @@ input[readonly][id^="healthBar"] {
 
 }
 
-
 .moves-container button {
     text-transform: capitalize;
     font-size: 20px;
+    flex: 1 0 48%;               /* take up roughly half the row */
 }
 
 .moves-container button:hover {
     background-color: #ddd;
+}
+
+.endMoves {
+    display: none;
+    background-color: red;
+    position: absolute;
+    height: 130px;
+    width: 430px;
+    opacity:0.15;
+    z-index: 1;
 }
 
 .sprite-hp-container {
@@ -512,9 +573,6 @@ input[readonly][id^="healthBar"] {
     margin: 4px 0;
 }
 
-.stat-container {
-}
-
 .stat-change {
     font-weight: bold;
     margin-left: 6px;
@@ -539,7 +597,6 @@ input[readonly][id^="healthBar"] {
     transform: translateY(3px);
 }
 
-/* fade-out animation for transient label (will be removed via JS after timeout) */
 .stat-change.fade-out {
     opacity: 0;
     transform: translateY(-6px) scale(0.98);
@@ -639,3 +696,25 @@ input[readonly][id^="healthBar"] {
     mask-size: 100% 100%;
     -webkit-mask-size: 100% 100%;
 }
+
+.startImg {
+    position: absolute;
+    width: 135px;
+    bottom: -68px;
+    right: 60%;
+    margin: 0;
+    max-width: fit-content;
+}
+
+.Green {
+    background-color: greenyellow;
+    color: greenyellow;
+    border-radius: 5px;
+    width: 48%;
+    max-height: 10px;
+    position: absolute;
+    left: 35%;
+    top: 38%;
+
+}
+

@@ -22,6 +22,8 @@ class Users {
     }
 }
 
+
+
 //data
 let users = ['Administrator', 'Manager', 'Cleric', 'Scribe'];
 let passwords = ['Password01', 'Password', 'Admin', 'P@ssword'];
@@ -54,7 +56,7 @@ if (window.location.href.includes('index3.html')) {
     Pokemons();
 }
 else {
-    document.getElementById('pokemonSprite1').addEventListener('mouseover', () => function () { document.getElementsById('battle-stats').style.display = "block"; console.log(document.getElementsById('battle-stats')) });
+    document.getElementById('pokemonSprite1').addEventListener('mouseover', () => function () { document.getElementsById('battle-stats').style.display = "block"; });
 
 }
 
@@ -181,7 +183,12 @@ async function sliding() {
 async function Pokemons() { do { await sleep(5000); sliding(); } while (i < 1302 && pokeLoop); }
 
 // Map Pokemon types to symbol URLs
-async function typeSymbol(type) { const map = { bug: 'https://github.com/Lpopp30/ApiPokemon/blob/main/bug_type_symbol_galar_by_jormxdos_dffvl73-pre.png?raw=true', dark: 'https://github.com/Lpopp30/ApiPokemon/blob/main/darkness_type_symbol_tcg_by_jormxdos_dfgddck-fullview.png?raw=true', fire: 'https://github.com/Lpopp30/ApiPokemon/blob/main/fire_type_symbol_galar_by_jormxdos_dffvl1m-pre.png?raw=true', flying: 'https://github.com/Lpopp30/ApiPokemon/blob/main/flying_type_symbol_galar_by_jormxdos_dffvl6n-fullview.png?raw=true', grass: 'https://github.com/Lpopp30/ApiPokemon/blob/main/grass_type_symbol_tcg_by_jormxdos_dfgdda7-fullview.png?raw=true', poison: 'https://github.com/Lpopp30/ApiPokemon/blob/main/poison_type_lvl_0_by_jormxdos_dh8zwty-pre.png?raw=true' }; return map[type] || ''; }
+async function typeSymbol(type) {
+    let typesymbol = `https://raw.githubusercontent.com/waydelyle/pokemon-assets/2386d4308f6995d9539a5c15c1256c22025385e4/assets/svg/types/${type}.svg`
+
+    return typesymbol || '';
+}
+
 
 // Open login panel
 function openLogin() {
@@ -235,7 +242,6 @@ async function loginData(userName, passw0rd, action) {
                     try {
 
                         if (typeof newWin.UserSide === 'function') {
-                            console.log(index);
                             newWin.UserSide(userPokemons, index);
                             called = true;
                         }
@@ -255,7 +261,7 @@ async function loginData(userName, passw0rd, action) {
         else {
             users.push(username);
             passwords.push(password);
-            console.log();
+
             pokemons.push([]);
             alert('Registration successful!');
         }
@@ -301,15 +307,13 @@ async function fetchUserPokemon(pokemon, choose, placement) {
 
         if (!choose) {
             let exp;
-            console.log(pokemons);
-            console.log(placement);
             let index = pokemons[[placement]].flat().indexOf(pokemon) + 2;
             let flattenArray = pokemons[[placement]].flat()
             levelUdenExp = flattenArray[index];
             if (await expLevel(levelUdenExp, d.name) > 0) {
                 exp = await expLevel(levelUdenExp, d.name, flattenArray[index - 1]);
             }
-            console.log(exp);
+
         }
 
         card = document.createElement('div');
@@ -361,7 +365,6 @@ async function chooseStarter(Id, name) {
         exp = await expLevel(5, name);
     }
 
-    console.log(exp);
 
     const starterCards = document.getElementsByClassName('userPokemoncard');
     for (let i = starterCards.length - 1; i >= 0; i--) {
@@ -370,7 +373,6 @@ async function chooseStarter(Id, name) {
     }
 
     pokemons.push([[Id, exp, 5]]);
-    console.log(pokemons);
     UserSide([Id], pokemons.length - 1);
 }
 
@@ -573,6 +575,7 @@ async function fetchData(pokemon) {
     }
 }
 
+
 // Team management function
 async function team(Id, choose) {
 
@@ -616,7 +619,6 @@ async function team(Id, choose) {
 
     else if (choose == "delete") {
 
-        console.log('X');
         await Promise.resolve(); // allow any pending pushes to finish
 
         const member = document.getElementById(Id);
@@ -843,8 +845,6 @@ async function expLevel(level, name, exp) {
 
 
     if (exp < expNeed) {
-        console.log('Level:', level - 1, 'Next Level', level);
-        console.log('Exp right now', exp, 'needed Exp', expNeed - exp);
     }
     else if (exp > expNeed) {
         level = +1;
@@ -859,6 +859,7 @@ async function expLevel(level, name, exp) {
     }
 
 }
+
 
 
 // Experience calculation function after battle
@@ -876,18 +877,13 @@ async function expFight(b, L, Lp, s, placement) {
 
     let exp = pokemons[[placement]] + math;
     pokemons[[placement]].push(exp);
+    this.ui.log(exp)
 
 }
 
 
-async function teamFight() {
 
-    userTeam();
-}
-
-
-
-function calculateStat(base, level = 50, iv = 31, ev = 0, isHP = false) {
+function calculateStat(base, level = pokemons[[placement]], iv = 31, ev = 0, isHP = false) {
     if (isHP) return Math.floor(((2 * base + iv + Math.floor(ev / 4)) * level) / 100) + level + 10;
     return Math.floor(((2 * base + iv + Math.floor(ev / 4)) * level) / 100) + 5;
 }
@@ -1043,9 +1039,10 @@ class Move {
 }
 
 class Pokemon {
-    constructor({ name, sprite, stats, types, moves }) {
+    constructor({ name, sprite, backSprite, stats, types, moves }) {
         this.name = name;
         this.sprite = sprite;
+        this.backSprite = backSprite;
         this.stats = stats;
         this.types = types;
         this.moves = moves.map(m => new Move(m));
@@ -1096,7 +1093,6 @@ class UI {
         // ✅ Use "this" to call another method in the same class
         let typeResult = 0;
         typeResult = await this.handleType(pokemon);
-        console.log("Processed result:", typeResult, type);
 
         if (typeResult != undefined && typeResult != null && type == 1) document.getElementById(`type${player}1`).src = typeResult;
 
@@ -1109,7 +1105,15 @@ class UI {
 
     renderPokemon(pokemon, player) {
         document.getElementById(`pokemonNameDisplay${player}`).textContent = pokemon.name;
-        document.getElementById(`pokemonSprite${player}`).src = pokemon.sprite;
+        if (player == 2)
+            {
+                document.getElementById(`pokemonSprite${player}`).src = pokemon.sprite;
+            }
+        else
+        {
+            document.getElementById(`pokemonSprite${player}`).src = pokemon.backSprite;
+        }
+        
 
 
         const j = Object.entries(pokemon.stats).map(([k, v]) => {
@@ -1142,6 +1146,17 @@ class UI {
 
     renderMoves(pokemon, player) {
         document.getElementById(`hud${player}`).style.display = "none";
+        if (player == 1) {
+            document.getElementById(`endMoves${player}`).style.left = "73%";
+            document.getElementById(`endMoves${player}`).style.bottom = "2%";
+            document.getElementById(`endMoves${player}`).style.display = "block";
+        }
+        if (player == 2) {
+            document.getElementById(`endMoves${player}`).style.left = "1%";
+            document.getElementById(`endMoves${player}`).style.top = "2%";
+            document.getElementById(`endMoves${player}`).style.display = "block";
+        }
+
         const container = document.getElementById(`moves${player}`);
         container.innerText = '';
         pokemon.moves.forEach(move => {
@@ -1154,7 +1169,7 @@ class UI {
 
             btn.onclick = () => Battle.instance.selectMove(player, move);
             container.appendChild(btn);
-            container.style.display = "block";
+            container.style.display = "flex";
         });
     }
 
@@ -1261,11 +1276,18 @@ class Battle {
     }
 
     selectMove(player, move) {
+        document.getElementById(`endMoves${player}`).style.display = "none";
+        if (player == 2) document.getElementsByClassName("moves-container")[player-2].style.display = "none";
+        else document.getElementsByClassName("moves-container")[player].style.display = "none";
+        document.getElementById(`hud${player}`).style.display = "block";
         this.selectedMoves[player] = move;
         if (this.selectedMoves[1] && this.selectedMoves[2]) {
             this.executeTurn();
             document.getElementsByClassName("moves-container")[0].style.display = "none";
             document.getElementsByClassName("moves-container")[1].style.display = "none";
+            document.getElementById(`endMoves1`).style.display = "none";
+            document.getElementById(`endMoves2`).style.display = "none";
+
         }
     }
 
@@ -1273,7 +1295,6 @@ class Battle {
         // increment and display turn counter in the battle log
         this.turn++;
         this.ui.log(`--- Turn ${this.turn} ---`);
-        let IsDead = false;
 
         // If either player selected a switch, perform switches first (always)
         const isSwitch1 = this.selectedMoves[1] && this.selectedMoves[1].type === 'switch';
@@ -1574,6 +1595,7 @@ async function fetchPokemon(name) {
         return new Pokemon({
             name: data.name,
             sprite: data.sprites.front_default,
+            backSprite: data.sprites.back_default,
             stats,
             types: data.types.map(t => t.type.name),
             moves: detailedMoves
@@ -1583,34 +1605,69 @@ async function fetchPokemon(name) {
 
 // ------------------ TEAM SUBMISSION ------------------ \\
 async function submitTeam(player) {
-    const team = [];
-    for (let i = 1; i <= 6; i++) {
-        const input = document.getElementById(`team${player}-poke${i}`);
-        const name = input.value.trim();
-        if (!name) continue;
-        const poke = await fetchPokemon(name);
-        if (poke) team.push(poke);
+ 
+    let team = [];
+    if (team.length == 0) {
+            console.log("hehhjusoa");
+        for (let i = 1; i <= 6; i++) {
+            const input = document.getElementById(`team${player}-poke${i}`);
+            const name = input.value.trim();
+            if (!name) continue;
+            const poke = await fetchPokemon(name);
+            if (poke) team.push(poke);
+        }
+
     }
+    //else {
+        for (let i = 1; i <= team.length; i++) {
+            const input = document.getElementById(`team${player}-poke${i}`);
+            const name = input.value.trim();
+
+            if (!name || name == team[i]) continue;
+            else {
+                const poke = await fetchPokemon(name);
+                //if (poke) team[i] = poke;
+            }
+
+        }
+    //}
     if (team.length === 0) return alert(`Player ${player} must select at least 1 Pokémon.`);
-    if (player === 1) window.team1 = team;
-    else window.team2 = team;
+    else document.getElementById(`submitTeam${player}`).style.display = "none";
+    if (player === 1) 
+        {
+            
+            window.team1 = team;
+            console.log(window.team1);
+        }
+    else 
+        {
+            
+            window.team2 = team;
+            console.log(window.team2);
+        }
 
-    if (window.team1 && window.team2) {
-        new Battle(window.team1, window.team2, new UI());
-        document.body.style.backgroundImage = "url('https://github.com/Lpopp30/ApiPokemon/blob/main/20fe1e143ea1bb175a2035b1d180e398.jpg?raw=true')";
-        document.body.style.backgroundRepeat = "no-repeat";
-        document.body.style.backgroundSize = "1900px 800px";
-        document.getElementById("hud1").style.display = "block";
-        document.getElementById("hud2").style.display = "block";
-        document.getElementsByClassName("pokemon-card")[0].style.display = "block";
-        document.getElementsByClassName("pokemon-card")[1].style.display = "block";
-        document.getElementById("level1").innerText = "lv: " + level;
-        document.getElementById("level2").innerText = "lv: " + level2;
-        document.getElementsByClassName("oval")[1].style.background = "radial-gradient(circle at center, #273781ff 0%, #094679ff 100%)";
-        document.getElementsByClassName("oval")[0].style.background = "radial-gradient(circle at center, #851e1eff 0%, #923030ff 100%)";
+    if (window.team1 && window.team2 && document.getElementById(`submitTeam1`).style.display == "none" && document.getElementById(`submitTeam2`).style.display == "none") {
 
+        document.getElementById("startBattle").style.display = "block";
     }
+
 }
+async function startBattle() {
+    new Battle(window.team1, window.team2, new UI());
+    document.body.style.backgroundImage = "url('https://github.com/Lpopp30/ApiPokemon/blob/main/20fe1e143ea1bb175a2035b1d180e398.jpg?raw=true')";
+    document.body.style.backgroundRepeat = "no-repeat";
+    document.body.style.backgroundSize = "1900px 800px";
+    document.getElementById("hud1").style.display = "block";
+    document.getElementById("hud2").style.display = "block";
+    document.getElementsByClassName("pokemon-card")[0].style.display = "block";
+    document.getElementsByClassName("pokemon-card")[1].style.display = "block";
+    document.getElementById("level1").innerText = "lv: " + level;
+    document.getElementById("level2").innerText = "lv: " + level2;
+    document.getElementsByClassName("oval")[1].style.background = "radial-gradient(circle at center, #273781ff 0%, #094679ff 100%)";
+    document.getElementsByClassName("oval")[0].style.background = "radial-gradient(circle at center, #851e1eff 0%, #923030ff 100%)";
+    
+}
+
 
 async function randomizeTeam(player) {
     for (let i = 1; i <= 6; i++) {
@@ -1620,41 +1677,82 @@ async function randomizeTeam(player) {
             const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${randomId}`);
             if (!res.ok) { input.value = ''; continue; }
             const data = await res.json();
+
+            await startInfo(data.name, `team${player}-poke${i}`, player);
             input.value = data.name;
         } catch {
             input.value = '';
         }
+
     }
 }
 
 
-
+const userTeamArray = [];
 async function userTeam() {
-  const userTeam = [];
-  if (teamIds.length > 0) {
-    userTeam.push(...teamIds);
 
-    const battleWindow = window.open('/index.html', '_blank');
+    if (teamIds.length > 0) {
+        userTeamArray.push(...teamIds);
 
-    battleWindow.onload = () => {
-    // ✅ Send message to the new tab
-    battleWindow.postMessage(
-      { type: "teamData", teamIds }, // message payload
-      "*" // target origin — replace "*" with your origin for security
-    );
-    battleWindow.console.log(teamIds);
-        for (let i = 1; i <= teamIds.length; i++) {
-      const el = battleWindow.document.getElementById(`team1-poke${i}`);
-      if (el) el.value = teamIds[i-1];
+        const battleWindow = window.open('/index.html', '_blank');
+
+        battleWindow.onload = () => {
+            // ✅ Send message to the new tab
+            battleWindow.postMessage(
+                { type: "teamData", teamIds }, // message payload
+                "*" // target origin — replace "*" with your origin for security
+            );
+            for (let i = 1; i <= teamIds.length; i++) {
+
+                const el = battleWindow.document.getElementById(`team1-poke${i}`);
+
+                if (el) {
+                    el.value = teamIds[i - 1];
+
+                    el.dispatchEvent(new Event('change', { bubbles: true }));
+
+                }
+                el.readOnly = true;
+            }
+            battleWindow.submitTeam(1);
+            battleWindow.document.getElementById("randomizeTeam1").style.display = "none";
+        };
+
+
     }
-    };
-  }
 
-  return userTeam;
+    return userTeam;
 }
 
 
 
+
+async function startInfo(name, id, person) {
+    let info = await fetchPokemon(name);
+
+    if (!info) {
+        console.error(`fetchPokemon(${name}) returned null or undefined`);
+        return;
+    }
+    document.getElementById(`Sprite-${id}`).src = info.sprite;
+    document.getElementById(`startHp-${id}`).innerText = info.hpCurrent + " HP";
+
+    const iu = new UI();
+    let rjgehk2;
+    let rjgehk = await iu.handleType(info.types[0]);
+    if (info.types.length == 2) {
+        rjgehk2 = await iu.handleType(info.types[1]);
+        document.getElementById(`startTypes2-${id}`).style.display = "block";
+        document.getElementById(`startTypes2-${id}`).src = rjgehk2;
+    }
+    else {
+        document.getElementById(`startTypes2-${id}`).style.display = "none";
+    }
+    document.getElementById(`startTypes1-${id}`).src = rjgehk;
+
+    document.getElementById(`submitTeam${person}`).style.display = "block";
+    document.getElementById("startBattle").style.display = "none";
+}
 
 
 // ------------------ GLOBAL SWITCH BUTTONS ------------------ \\
@@ -1680,6 +1778,14 @@ function endbtn(player, endBattle) {
 function closePopupGlobal() {
     const iu = new UI();
     iu.closePopup();
+}
+function classFunction(Class, Functions, player){
+
+    if (Class == 'Battle' && Functions == 'selectMove')
+    {
+
+        Battle.instance.selectMove(player);
+    }
 }
 
 console.log("simon was here");

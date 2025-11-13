@@ -8,45 +8,172 @@
     <link rel="stylesheet" href="style.css">
 </head>
 
-<body>
+<body class="gradientBody">
+
 
     <!-- TEAM SELECTION -->
     <div class="team-selection" id="team-selection">
-        <h2>Player 1: Choose your team</h2>
+
+
+
         <div id="team1-selection" class="team-inputs">
-            <input type="text" id="team1-poke1" placeholder="Pokémon 1">
-            <input type="text" id="team1-poke2" placeholder="Pokémon 2">
-            <input type="text" id="team1-poke3" placeholder="Pokémon 3">
-            <input type="text" id="team1-poke4" placeholder="Pokémon 4">
-            <input type="text" id="team1-poke5" placeholder="Pokémon 5">
-            <input type="text" id="team1-poke6" placeholder="Pokémon 6">
-            <button onclick="randomizeTeam(1)">Randomize Team</button>
-            <button onclick="submitTeam(1)">Submit Team</button>
+            <div class="holder">
+                <input type="text" id="team1-poke1" placeholder="Enter pokemon" class="teamSelectName"
+                    onchange="startInfo(this.value, id, 1)">
+                <div class="sprite-hp-container">
+                    <img id="Sprite-team1-poke1" class="startImg">
+                </div>
+                <div class="Green">'</div>
+                <div id="startHp-team1-poke1" class="startHp"></div>
+                <img id="startTypes1-team1-poke1" class="startTypes">
+                <img id="startTypes2-team1-poke1" class="startTypes2">
+            </div>
+            <div class="holder">
+                <input type="text" id="team1-poke2" placeholder="Enter pokemon" class="teamSelectName"
+                    onchange="startInfo(this.value, id, 1)">
+                <div class="sprite-hp-container">
+                    <img id="Sprite-team1-poke2" class="startImg">
+                </div>
+                <div class="Green">'</div>
+                <div id="startHp-team1-poke2" class="startHp"></div>
+                <img id="startTypes1-team1-poke2" class="startTypes">
+                <img id="startTypes2-team1-poke2" class="startTypes2">
+            </div>
+            <div class="holder">
+                <input type="text" id="team1-poke3" placeholder="Enter pokemon" class="teamSelectName"
+                    onchange="startInfo(this.value, id, 1)">
+                <div class="sprite-hp-container">
+                    <img id="Sprite-team1-poke3" class="startImg">
+                </div>
+                <div class="Green">'</div>
+                <div id="startHp-team1-poke3" class="startHp"></div>
+                <img id="startTypes1-team1-poke3" class="startTypes">
+                <img id="startTypes2-team1-poke3" class="startTypes2">
+            </div>
+            <div class="holder">
+                <input type="text" id="team1-poke4" placeholder="Enter pokemon" class="teamSelectName"
+                    onchange="startInfo(this.value, id, 1)">
+                <div class="sprite-hp-container">
+                    <img id="Sprite-team1-poke4" class="startImg">
+                </div>
+                <div class="Green">'</div>
+                <div id="startHp-team1-poke4" class="startHp"></div>
+                <img id="startTypes1-team1-poke4" class="startTypes">
+                <img id="startTypes2-team1-poke4" class="startTypes2">
+            </div>
+            <div class="holder">
+                <input type="text" id="team1-poke5" placeholder="Enter pokemon" class="teamSelectName"
+                    onchange="startInfo(this.value, id, 1)">
+                <div class="sprite-hp-container">
+                    <img id="Sprite-team1-poke5" class="startImg">
+                </div>
+                <div class="Green">'</div>
+                <div id="startHp-team1-poke5" class="startHp"></div>
+                <img id="startTypes1-team1-poke5" class="startTypes">
+                <img id="startTypes2-team1-poke5" class="startTypes2">
+            </div>
+            <div class="holder">
+                <input type="text" id="team1-poke6" placeholder="Enter pokemon" class="teamSelectName"
+                    onchange="startInfo(this.value, id, 1)">
+                <div class="sprite-hp-container">
+                    <img id="Sprite-team1-poke6" class="startImg">
+                </div>
+                <div class="Green">'</div>
+                <div id="startHp-team1-poke6" class="startHp"></div>
+                <img id="startTypes1-team1-poke6" class="startTypes">
+                <img id="startTypes2-team1-poke6" class="startTypes2">
+            </div>
+            <button onclick="randomizeTeam(1)" id="randomizeTeam1">Randomize Team</button>
+            <button onclick="submitTeam(1)" id="submitTeam1">Submit Team</button>
         </div>
 
-        <h2>Player 2: Choose your team</h2>
+        <button id="startBattle" class="startBattle" onclick="startBattle()">!!START BATTLE!!</button>
+
         <div id="team2-selection" class="team-inputs">
-            <input type="text" id="team2-poke1" placeholder="Pokémon 1">
-            <input type="text" id="team2-poke2" placeholder="Pokémon 2">
-            <input type="text" id="team2-poke3" placeholder="Pokémon 3">
-            <input type="text" id="team2-poke4" placeholder="Pokémon 4">
-            <input type="text" id="team2-poke5" placeholder="Pokémon 5">
-            <input type="text" id="team2-poke6" placeholder="Pokémon 6">
-            <button onclick="randomizeTeam(2)">Randomize Team</button>
-            <button onclick="submitTeam(2)">Submit Team</button>
+            <div class="holder">
+                <input type="text" id="team2-poke1" placeholder="Enter pokemon" class="teamSelectName"
+                    onchange="startInfo(this.value, id, 2)">
+                <div class="sprite-hp-container">
+                    <img id="Sprite-team2-poke1" class="startImg">
+                </div>
+                <div class="Green">'</div>
+                <div id="startHp-team2-poke1" class="startHp"></div>
+                <img id="startTypes1-team2-poke1" class="startTypes">
+                <img id="startTypes2-team2-poke1" class="startTypes2">
+            </div>
+
+            <div class="holder">
+                <input type="text" id="team2-poke2" placeholder="Enter pokemon" class="teamSelectName"
+                    onchange="startInfo(this.value, id, 2)">
+                <div class="sprite-hp-container">
+                    <img id="Sprite-team2-poke2" class="startImg">
+                </div>
+                <div class="Green">'</div>
+                <div id="startHp-team2-poke2" class="startHp"></div>
+                <img id="startTypes1-team2-poke2" class="startTypes">
+                <img id="startTypes2-team2-poke2" class="startTypes2">
+            </div>
+            <div class="holder">
+                <input type="text" id="team2-poke3" placeholder="Enter pokemon" class="teamSelectName"
+                    onchange="startInfo(this.value, id, 2)">
+                <div class="sprite-hp-container">
+                    <img id="Sprite-team2-poke3" class="startImg">
+                </div>
+                <div class="Green">'</div>
+                <div id="startHp-team2-poke3" class="startHp"></div>
+                <img id="startTypes1-team2-poke3" class="startTypes">
+                <img id="startTypes2-team2-poke3" class="startTypes2">
+            </div>
+            <div class="holder">
+                <input type="text" id="team2-poke4" placeholder="Enter pokemon" class="teamSelectName"
+                    onchange="startInfo(this.value, id, 2)">
+                <div class="sprite-hp-container">
+                    <img id="Sprite-team2-poke4" class="startImg">
+                </div>
+                <div class="Green">'</div>
+                <div id="startHp-team2-poke4" class="startHp"></div>
+                <img id="startTypes1-team2-poke4" class="startTypes">
+                <img id="startTypes2-team2-poke4" class="startTypes2">
+            </div>
+            <div class="holder">
+                <input type="text" id="team2-poke5" placeholder="Enter pokemon" class="teamSelectName"
+                    onchange="startInfo(this.value, id, 2)">
+                <div class="sprite-hp-container">
+                    <img id="Sprite-team2-poke5" class="startImg">
+                </div>
+                <div class="Green">'</div>
+                <div id="startHp-team2-poke5" class="startHp"></div>
+                <img id="startTypes1-team2-poke5" class="startTypes">
+                <img id="startTypes2-team2-poke5" class="startTypes2">
+            </div>
+            <div class="holder">
+                <input type="text" id="team2-poke6" placeholder="Enter pokemon" class="teamSelectName"
+                    onchange="startInfo(this.value, id, 2)">
+                <div class="sprite-hp-container">
+                    <img id="Sprite-team2-poke6" class="startImg">
+                </div>
+                <div class="Green">'</div>
+                <div id="startHp-team2-poke6" class="startHp"></div>
+                <img id="startTypes1-team2-poke6" class="startTypes">
+                <img id="startTypes2-team2-poke6" class="startTypes2">
+            </div>
+            <button onclick="randomizeTeam(2)" id="randomizeTeam2">Randomize Team</button>
+            <button onclick="submitTeam(2)" id="submitTeam2">Submit Team</button>
         </div>
     </div>
+
+
 
     <!-- BATTLE CONTAINER -->
     <div id="moves2" class="moves-container moves-container2"></div>
     <div id="switch-menu1" class="switch-menu"></div>
     <div id="switch-menu2" class="switch-menu"></div>
-
+    <button onclick="classFunction('Battle', 'selectMove',2)" class="endMoves" id="endMoves2"></button>
     <div class="hud2" id="hud2">
         <button id="hudMoves2" class=" teamFightButton hudMoves2" onclick="">Moves</button>
         <button onclick="manualSwitch(2)" class=" teamFightButton hudSwitch2">Switch</button>
         <button onclick="battlelogDisplay()" class=" teamFightButton hudBattle2">Battle log</button>
-        <button onclick="endbtn(2, 1)"  class=" teamFightButton hudEnd2">End</button>
+        <button onclick="endbtn(2, 1)" class=" teamFightButton hudEnd2">End</button>
     </div>
 
     <!-- Player 2 -->
@@ -67,7 +194,7 @@
         <div class="oval"></div>
         <!--<div id="stats1" class="stats-container"></div>-->
 
-        
+
     </div>
 
     <!-- Player 1 -->
@@ -90,7 +217,7 @@
 
 
     </div>
-        <div class="stat-container" id="battle-stats"></div>
+    <div class="stat-container" id="battle-stats"></div>
 
     <!-- BATTLE LOG -->
     <div class="battle-log" id="battle-log"></div>
@@ -103,12 +230,13 @@
         </div>
     </div>
     <div id="moves1" class="moves-container moves-container1"></div>
+    <button onclick="classFunction('Battle', 'selectMove', 1)" class="endMoves" id="endMoves1"></button>
     <!--<div id="moves2" class="moves-container"></div>-->
     <div class="hud1" id="hud1">
         <button id="hudMoves1" class=" teamFightButton hudMoves1" onclick="">Moves</button>
         <button onclick="manualSwitch(1)" class=" teamFightButton hudSwitch1">Switch</button>
         <button onclick="battlelogDisplay()" class=" teamFightButton hudBattle1">Battle log</button>
-        <button onclick = 'endbtn(1, 2)'  class="teamFightButton hudEnd1">End</button>
+        <button onclick='endbtn(1, 2)' class="teamFightButton hudEnd1">End</button>
     </div>
 
     <script src="Script1.js"></script>
