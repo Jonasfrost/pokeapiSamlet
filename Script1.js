@@ -22,15 +22,13 @@ class Users {
     }
 }
 
-
-
 //data
 let users = ['Administrator', 'Manager', 'Cleric', 'Scribe'];
 let passwords = ['Password01', 'Password', 'Admin', 'P@ssword'];
 let pokemons = [
     [[2, 364, 8], [18, 463, 9], [30, 634, 10]],
     [[6, 436, 9], [15, 643, 8], [34, 346, 8]],
-    [[8, 722, 10], [27, 227, 6], [38, 272, 6]],
+    [[8, 722, 10], [27, 227, 6], [38, 272, 8]],
     [[12, 200, 5], [25, 1753, 12], [40, 1025, 10]]
 ];
 
@@ -373,11 +371,13 @@ async function chooseStarter(Id, name) {
     }
 
     pokemons.push([[Id, exp, 5]]);
+
     UserSide([Id], pokemons.length - 1);
 }
 
 // Choose fighter from main page
 async function chooseFighter(Id, event, name, user) {
+
     const choose = document.querySelector('.dropdown-content');
 
     // Clear old buttons if they exist
@@ -860,11 +860,36 @@ async function expLevel(level, name, exp) {
 
 }
 
+// Enemy level determination function
+async function enemyLvlFunction(levelArray) {
 
+    let enemylvl;
+
+
+    const highestLvl = Math.max(...levelArray);
+    const lowestLvl = Math.min(...levelArray);
+    enemylvl = Math.floor(Math.random() * (highestLvl - lowestLvl + 1)) + lowestLvl;
+    console.log(enemylvl, "enemylvl");
+
+
+
+    console.log(levelArray);
+    console.log(Math.max(...levelArray));
+    console.log(Math.min(...levelArray));
+
+
+
+
+    console.log(lowestLvl);
+    console.log(highestLvl);
+
+    console.log(enemylvl);
+    return enemylvl;
+}
 
 // Experience calculation function after battle
-async function expFight(b, L, Lp, s, placement) {
-    // b is the base experience yield of the fainted Pokémon's species; values for the current Generation are listed here
+async function expFight(b, L, Lp, s, id) {
+    // b is the base experience yield of the fainted Pokémon's species;
     b;
     // L is the level of the fainted Pokémon
     L;
@@ -875,21 +900,43 @@ async function expFight(b, L, Lp, s, placement) {
 
     math = ((b * L) / 5) * (1 / s) * (((Math.sqrt(2 * L + 10)) * Math.pow(2 * L + 10, 2)) / (Math.sqrt(L + Lp + 10) * Math.pow(2 * L + 10, 2))) + 1;
 
-    let exp = pokemons[[placement]] + math;
-    pokemons[[placement]].push(exp);
-    this.ui.log(exp)
+    if (id !== undefined) {
+let startExp;
+let placement;
+        for (let i = 0; i < pokemons.length; i++) {
+            const row = pokemons[i];
 
+            for (let j = 0; j < row.length; j++) {
+                const poke = row[j];
+
+                if (id == poke[0]) {
+                    placement = pokemons[[i][j]];
+                    startExp = poke[1];
+                    // Stop both loops
+                    i = pokemons.length; // break outer loop
+                    break; // break inner loop
+            }
+        }
+
+        let exp = startExp + math;
+        console.log(exp, "exp after fight", placement);
+        pokemons[[placement]].push(exp);
+        this.ui.log(exp)
+    }
+
+    }
 }
 
 
-
-function calculateStat(base, level = pokemons[[placement]], iv = 31, ev = 0, isHP = false) {
+// Damage calculation functions
+function calculateStat(base, level, iv = 31, ev = 0, isHP = false) {
     if (isHP) return Math.floor(((2 * base + iv + Math.floor(ev / 4)) * level) / 100) + level + 10;
     return Math.floor(((2 * base + iv + Math.floor(ev / 4)) * level) / 100) + 5;
 }
+// Multipliers for stat stages
 function calculateDamage(level, attackStat, power, defenseStat, stab = 1, typeEffectiveness = 1) {
     const randomFactor = Math.floor(Math.random() * (100 - 85 + 1)) + 85;
-    const baseDamage = ((((2 * level) / 5 + 2) * (attackStat * attackMultiplier) * power / (defenseStat * defenseMultiplier)) / 50) + 2;
+    const baseDamage = ((((2 * level) / 5 + 2) * (attackStat * attackMultiplier) * power / (defenseStat * defenseMultiplier)) / level) + 2;
     return Math.floor(baseDamage * stab * typeEffectiveness * randomFactor / 100);
 }
 
@@ -973,6 +1020,7 @@ function lerpRgb(a, b, t) {
         Math.round(a[2] + (b[2] - a[2]) * t)
     ];
 }
+// pct: 0..100
 function hpColorForPercent(pct) {
     pct = Math.max(0, Math.min(100, pct));
     const green = [0, 200, 0];
@@ -1039,7 +1087,7 @@ class Move {
 }
 
 class Pokemon {
-    constructor({ name, sprite, backSprite, stats, types, moves }) {
+    constructor({ name, sprite, backSprite, stats, types, moves, base_experience, level }) {
         this.name = name;
         this.sprite = sprite;
         this.backSprite = backSprite;
@@ -1048,6 +1096,8 @@ class Pokemon {
         this.moves = moves.map(m => new Move(m));
         this.hpMax = stats.hp;
         this.hpCurrent = stats.hp;
+        this.baseExp = base_experience;
+        this.level = level;
         // track stat stages per stat key (same keys as stats object)
         this.statStages = {};
         Object.keys(stats).forEach(k => this.statStages[k] = 0);
@@ -1105,15 +1155,14 @@ class UI {
 
     renderPokemon(pokemon, player) {
         document.getElementById(`pokemonNameDisplay${player}`).textContent = pokemon.name;
-        if (player == 2)
-            {
-                document.getElementById(`pokemonSprite${player}`).src = pokemon.sprite;
-            }
-        else
-        {
-            document.getElementById(`pokemonSprite${player}`).src = pokemon.backSprite;
+        if (player == 2) {
+            document.getElementById(`pokemonSprite${player}`).src = pokemon.sprite;
         }
-        
+        else {
+            document.getElementById(`pokemonSprite${player}`).src = pokemon.backSprite;
+
+        }
+
 
 
         const j = Object.entries(pokemon.stats).map(([k, v]) => {
@@ -1273,11 +1322,12 @@ class Battle {
         //document.getElementById('battle-log').style.display = 'block';
         this.ui.renderPokemon(this.currentPoke1, 1);
         this.ui.renderPokemon(this.currentPoke2, 2);
+
     }
 
     selectMove(player, move) {
         document.getElementById(`endMoves${player}`).style.display = "none";
-        if (player == 2) document.getElementsByClassName("moves-container")[player-2].style.display = "none";
+        if (player == 2) document.getElementsByClassName("moves-container")[player - 2].style.display = "none";
         else document.getElementsByClassName("moves-container")[player].style.display = "none";
         document.getElementById(`hud${player}`).style.display = "block";
         this.selectedMoves[player] = move;
@@ -1434,6 +1484,10 @@ class Battle {
 
         if (defender.isFainted()) {
             this.ui.log(`${defender.name} fainted!`);
+            if (player === 1) {
+
+                expFight(defender.baseExp, defender.level, attacker.level, 1, attacker.id);
+            }
             await this.forcedSwitch(player === 1 ? 2 : 1);
         }
     }
@@ -1516,8 +1570,8 @@ class Battle {
 
             // Calculate new stat
             const prevStage = targetPoke.statStages[statKey] || 0;
-            // clamp stages to -6 <-> +6
-            const newStage = Math.max(-6, Math.min(6, prevStage + delta));
+
+            const newStage = Math.max(-7, Math.min(5, prevStage + delta));
             const appliedDelta = newStage - prevStage;
             targetPoke.statStages[statKey] = newStage;
             // transient UI marker used by renderPokemon
@@ -1555,13 +1609,14 @@ class Battle {
         });
     }
 }
-const level = 50;
-const level2 = 50;
+
 // ------------------ FETCH FUNCTIONS ------------------ \\
 const moveCache = new Map();
 
-async function fetchPokemon(name) {
+async function fetchPokemon(name, level) {
+
     try {
+
         const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${name.toLowerCase()}`);
         if (!res.ok) return null;
         const data = await res.json();
@@ -1571,6 +1626,7 @@ async function fetchPokemon(name) {
             name: m.move.name,
             url: m.move.url
         }));
+
         const detailedMoves = await Promise.all(moves.map(async m => {
             if (moveCache.has(m.url)) {
                 return moveCache.get(m.url);
@@ -1598,57 +1654,65 @@ async function fetchPokemon(name) {
             backSprite: data.sprites.back_default,
             stats,
             types: data.types.map(t => t.type.name),
-            moves: detailedMoves
+            moves: detailedMoves,
+            base_experience: data.base_experience,
+            level: level
         });
     } catch { return null; }
 }
-
+let levelArray = [];
 // ------------------ TEAM SUBMISSION ------------------ \\
-async function submitTeam(player) {
- 
+async function submitTeam(player, level) {
+    let enemylvl;
     let team = [];
+
     if (team.length == 0) {
-            console.log("hehhjusoa");
         for (let i = 1; i <= 6; i++) {
             const input = document.getElementById(`team${player}-poke${i}`);
             const name = input.value.trim();
             if (!name) continue;
-            const poke = await fetchPokemon(name);
-            if (poke) team.push(poke);
+            if (level != undefined) {
+                levelArray.push(level);
+            }
+            else {
+                if (levelArray.length != 0) enemylvl = await enemyLvlFunction(levelArray);
+
+
+            }
+            const poke = await fetchPokemon(name, level || enemylvl || 50);
+            if (poke) {
+                team.push(poke);
+
+            }
         }
 
     }
-    //else {
-        for (let i = 1; i <= team.length; i++) {
-            const input = document.getElementById(`team${player}-poke${i}`);
-            const name = input.value.trim();
 
-            if (!name || name == team[i]) continue;
-            else {
-                const poke = await fetchPokemon(name);
-                //if (poke) team[i] = poke;
-            }
 
-        }
-    //}
+
+
+
+
     if (team.length === 0) return alert(`Player ${player} must select at least 1 Pokémon.`);
     else document.getElementById(`submitTeam${player}`).style.display = "none";
-    if (player === 1) 
-        {
-            
-            window.team1 = team;
-            console.log(window.team1);
-        }
-    else 
-        {
-            
-            window.team2 = team;
-            console.log(window.team2);
-        }
+    if (player === 1) {
+        window.team1 = team;
+        if (level != undefined) document.getElementById("level1").innerText = "lv: " + level || 50;
+        else document.getElementById("level1").innerText = "lv: " + 50;
+    }
+    else {
+
+        window.team2 = team;
+        if (enemylvl != undefined) document.getElementById("level2").innerText = "lv: " + enemylvl || 50;
+        else document.getElementById("level2").innerText = "lv: " + 50;
+    }
 
     if (window.team1 && window.team2 && document.getElementById(`submitTeam1`).style.display == "none" && document.getElementById(`submitTeam2`).style.display == "none") {
 
         document.getElementById("startBattle").style.display = "block";
+
+
+
     }
 
 }
@@ -1661,11 +1725,10 @@ async function startBattle() {
     document.getElementById("hud2").style.display = "block";
     document.getElementsByClassName("pokemon-card")[0].style.display = "block";
     document.getElementsByClassName("pokemon-card")[1].style.display = "block";
-    document.getElementById("level1").innerText = "lv: " + level;
-    document.getElementById("level2").innerText = "lv: " + level2;
+
     document.getElementsByClassName("oval")[1].style.background = "radial-gradient(circle at center, #273781ff 0%, #094679ff 100%)";
     document.getElementsByClassName("oval")[0].style.background = "radial-gradient(circle at center, #851e1eff 0%, #923030ff 100%)";
-    
+
 }
 
 
@@ -1708,14 +1771,17 @@ async function userTeam() {
 
                 if (el) {
                     el.value = teamIds[i - 1];
-
+                    el.readOnly = true;
+                    battleWindow.teamIds = teamIds;
+                    battleWindow.pokemons = pokemons;
                     el.dispatchEvent(new Event('change', { bubbles: true }));
 
+
                 }
-                el.readOnly = true;
+
             }
-            battleWindow.submitTeam(1);
             battleWindow.document.getElementById("randomizeTeam1").style.display = "none";
+
         };
 
 
@@ -1725,10 +1791,32 @@ async function userTeam() {
 }
 
 
-
-
 async function startInfo(name, id, person) {
-    let info = await fetchPokemon(name);
+    let fullPlace = null;
+    let number = id.charAt(id.length - 1) - 1;
+    let info
+    if (document.getElementById(id).readOnly == true) {
+        for (let i = 0; i < window.pokemons.length; i++) {
+            const row = window.pokemons[i];
+
+            for (let j = 0; j < row.length; j++) {
+                const poke = row[j];
+
+                if (window.teamIds[number] == poke[0]) {
+                    fullPlace = poke[2];
+                    info = await fetchPokemon(name, fullPlace || 50);
+                    // Stop both loops
+                    i = window.pokemons.length; // break outer loop
+                    break; // break inner loop
+                } else {
+                    fullPlace = null;
+                }
+            }
+        }
+
+    }
+
+    else { info = await fetchPokemon(name, fullPlace || 50); }
 
     if (!info) {
         console.error(`fetchPokemon(${name}) returned null or undefined`);
@@ -1752,6 +1840,9 @@ async function startInfo(name, id, person) {
 
     document.getElementById(`submitTeam${person}`).style.display = "block";
     document.getElementById("startBattle").style.display = "none";
+
+
+    if (document.getElementById(id).readOnly == true) submitTeam(1, fullPlace || 50);
 }
 
 
@@ -1779,10 +1870,9 @@ function closePopupGlobal() {
     const iu = new UI();
     iu.closePopup();
 }
-function classFunction(Class, Functions, player){
+function classFunction(Class, Functions, player) {
 
-    if (Class == 'Battle' && Functions == 'selectMove')
-    {
+    if (Class == 'Battle' && Functions == 'selectMove') {
 
         Battle.instance.selectMove(player);
     }
